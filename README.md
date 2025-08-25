@@ -1,4 +1,4 @@
-# [Composer Based Installer for WordPress](https://github.com/turkeryildirim/wordpress-installer)
+# [Composer Based Installer for WordPress](https://github.com/turkeryildirim/wp-composer/)
 
 This installer makes possible to manage installation of WordPress, themes and plugins by Composer. It also includes WordPress Coding Standarts checker and fixer.
 
