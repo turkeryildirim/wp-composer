@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<ruleset name="WordPress">
+  <description>WordPress Coding Standards</description>
+
+  <rule ref="WordPress"/>
+  <rule ref="PHPCompatibility"/>
+
+  <config name="testVersion" value="8.2-"/>
+  <config name="minimum_supported_wp_version" value="6.8"/>
+
+  <file>index.php</file>
+  <file>wp-config.php</file>
+  <file>app/plugins</file>
+  <file>app/themes</file>
+
+  <exclude-pattern>*/vendor/*</exclude-pattern>
+  <exclude-pattern>*/node_modules/*</exclude-pattern>
+
+  <arg name="extensions" value="php"/>
+  <arg value="-colors"/>
+  <arg value="s"/>
+
+  <rule ref="Generic.Commenting.DocComment.MissingShort">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.FunctionComment.Missing">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.ClassComment.Missing">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.VariableComment.Missing">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.FunctionComment.MissingParamComment">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+
+  <rule ref="Squiz.Commenting.FileComment.Missing">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+
+  <rule ref="WordPress.WP.I18n.NonSingularStringLiteralText">
+    <exclude-pattern>*</exclude-pattern>
+  </rule>
+</ruleset>
