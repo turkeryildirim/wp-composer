@@ -9,6 +9,7 @@ app/uploads/*
 !app/uploads/index.php
 app/languages/*
 !app/languages/index.php
+.env
 
 ### Composer ###
 composer.phar
