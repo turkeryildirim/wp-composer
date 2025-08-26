@@ -8,7 +8,7 @@ RUN mkdir -p /data /var/log/redis /var/run/ && \
 EXPOSE 6379
 
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD redis-cli -a redispassword ping || exit 1
+  CMD redis-cli ping || exit 1
 
 USER redis
 

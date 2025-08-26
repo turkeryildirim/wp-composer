@@ -61,7 +61,12 @@ services:
       - mariadb
       - redis
       - mailpit
+    environment:
+      - MYSQL_HOST=mariadb.local
+      - REDIS_HOST=redis.local
+      - MAIL_HOST=mailpit.local
     extra_hosts:
+      - "host.docker.internal:host-gateway"
       - "redis.local:172.28.0.10"
       - "mariadb.local:172.28.0.11"
       - "mailpit.local:172.28.0.12"
@@ -73,7 +78,7 @@ services:
     build:
       context: docker/nginx/${DOCKER_ENV}/.
       dockerfile: Dockerfile
-    container_name: nginx_${DOCKER_SERVICE}
+    container_name: nginx_${DOCKER_ENV}
     hostname: nginx
     restart: unless-stopped
     ports:

@@ -1,0 +1,6 @@
+path: wordpress
+disabled_commands:
+  - db drop
+  - plugin install
+require:
+  - init.php

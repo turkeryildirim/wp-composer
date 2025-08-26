@@ -11,14 +11,22 @@
  * @package WordPress
  */
 
+require_once __DIR__ . '/init.php';
+
 setlocale( LC_ALL, 'C' );
 
 define( 'SITE_DOMAIN', env( 'SITE_DOMAIN', 'http://localhost' ) );
 define( 'SITE_ENV', env( 'SITE_ENV', 'local' ) );
-const WP_CONTENT_DIR = __DIR__ . '/app';
+
 const WP_HOME        = SITE_DOMAIN;
 const WP_SITEURL     = SITE_DOMAIN . '/wordpress';
+const WP_CONTENT_DIR = __DIR__ . '/app';
 const WP_CONTENT_URL = SITE_DOMAIN . '/app';
+
+define( 'WP_TITLE', env( 'SITE_TITLE', 'My WordPress' ) );
+define( 'WP_ADMIN_USER', env( 'SITE_ADMIN_USER', 'admin' ) );
+define( 'WP_ADMIN_PASSWORD', env( 'SITE_ADMIN_PASSWORD', 'admin' ) );
+define( 'WP_ADMIN_EMAIL', env( 'SITE_ADMIN_EMAIL', 'admin@wordpress.test' ) );
 
 // MySQL.
 // phpcs:ignore
@@ -103,6 +111,6 @@ if ( WP_DEBUG ) {
 
 // don't make any change below.
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', __DIR__ . '/wordpress' );
+	define( 'ABSPATH', __DIR__ . '/wordpress/' );
 }
-require_once ABSPATH . '/wp-settings.php';
+require_once ABSPATH . 'wp-settings.php';
