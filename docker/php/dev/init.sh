@@ -1,5 +1,17 @@
-#!/bin/sh
+#!/bin/bash
+
 set -e
+
+# load .env
+if [ -f /var/www/.env ]; then
+  set -o allexport
+  while IFS= read -r line; do
+      line="${line%%[$'\r']}"
+      case "$line" in \#*|"") continue ;; esac
+      export "$line"
+  done < <(grep -v '^\s*#' /var/www/.env)
+  set +o allexport
+fi
 
 echo "🚀 Starting PHP service initialization..."
 
@@ -10,19 +22,19 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 print_status() {
-    echo "${GREEN}[INFO]${NC} $1"
+    printf "${GREEN}[INFO]${NC} %s\n" "$1"
 }
 
 print_warning() {
-    echo "${YELLOW}[WARNING]${NC} $1"
+    printf "${YELLOW}[WARNING]${NC} %s\n" "$1"
 }
 
 print_error() {
-    echo "${RED}[ERROR]${NC} $1"
+    printf "${RED}[ERROR]${NC} %s\n" "$1"
 }
 
 print_step() {
-    echo "${BLUE}[STEP]${NC} $1"
+    printf "${BLUE}[STEP]${NC} %s\n" "$1"
 }
 
 wait_for_services() {
@@ -76,39 +88,44 @@ generate_env_file() {
    print_status ".env found, skipping."
 }
 
-setup_directories() {
-    print_step "Setting up directories..."
+prepare_directories() {
+    print_step "Preparing directories..."
 
-    mkdir -p logs
+    if [ ! -d "logs" ]; then
+        mkdir -p logs
+        print_status "logs directory created."
+    else
+        print_status "logs directory already exists."
+    fi
 
-    print_status "🎉 Directories setup completed!"
-}
+    if [ ! -d "app/uploads" ]; then
+        mkdir -p app/uploads
+        print_status "uploads directory created."
+    else
+        print_status "uploads directory already exists."
+    fi
 
-clear_logs() {
     if [ "$CLEAR_LOGS" = "true" ]; then
         print_step "Clearing log files..."
         find logs -type f -name "*.log" -delete
         print_status "🎉 Log files cleared."
     fi
+
+    print_status "🎉 Directory preparation completed!"
 }
 
 setup_wordpress() {
-    cd /var/www/wordpress
-    local WP_CONFIG="/var/www/wp-config.php"
-
+    cd /var/www
     print_step "Checking WordPress installation..."
-
-    [ ! -f wp-config.php ] && ln -s ../wp-config.php wp-config.php
-
-    if ! ../vendor/bin/wp core is-installed --allow-root; then
+    if ! ./vendor/bin/wp core is-installed --allow-root; then
         print_status "WordPress not installed. Starting installation..."
 
-        ../vendor/bin/wp core install \
-          --url="$WP_SITEURL" \
-          --title="$WP_TITLE" \
-          --admin_user="$WP_ADMIN_USER" \
-          --admin_password="$WP_ADMIN_PASSWORD" \
-          --admin_email="$WP_ADMIN_EMAIL" \
+        ./vendor/bin/wp core install \
+          --url="${SITE_DOMAIN}/wordpress" \
+          --title="$SITE_TITLE" \
+          --admin_user="$SITE_ADMIN_USER" \
+          --admin_password="$SITE_ADMIN_PASSWORD" \
+          --admin_email="$SITE_ADMIN_EMAIL" \
           --skip-email \
           --allow-root
 
@@ -125,9 +142,8 @@ main() {
     wait_for_services
     install_dependencies
     generate_env_file
-    setup_directories
-    clear_logs
-    #setup_wordpress
+    prepare_directories
+    setup_wordpress
 
     print_status "✅ Initialization completed successfully!"
     print_status "🐘 Starting PHP-FPM..."

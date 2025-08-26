@@ -10,4 +10,4 @@ COPY ./my.cnf /etc/mysql/conf.d/custom.cnf
 EXPOSE 3306
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD mysqladmin ping -h localhost -p"$MARIADB_ROOT_PASSWORD" --silent || exit 1
+  CMD ["healthcheck.sh", "--connect", "--innodb_initialized"]

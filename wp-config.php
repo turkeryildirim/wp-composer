@@ -23,10 +23,9 @@ const WP_SITEURL     = SITE_DOMAIN . '/wordpress';
 const WP_CONTENT_DIR = __DIR__ . '/app';
 const WP_CONTENT_URL = SITE_DOMAIN . '/app';
 
-define( 'WP_TITLE', env( 'SITE_TITLE', 'My WordPress' ) );
-define( 'WP_ADMIN_USER', env( 'SITE_ADMIN_USER', 'admin' ) );
-define( 'WP_ADMIN_PASSWORD', env( 'SITE_ADMIN_PASSWORD', 'admin' ) );
-define( 'WP_ADMIN_EMAIL', env( 'SITE_ADMIN_EMAIL', 'admin@wordpress.test' ) );
+define( 'SITE_TITLE', env( 'SITE_TITLE', 'My WordPress' ) );
+define( 'SITE_ADMIN_USER', env( 'SITE_ADMIN_USER', 'admin' ) );
+define( 'SITE_ADMIN_EMAIL', env( 'SITE_ADMIN_EMAIL', 'admin@wordpress.test' ) );
 
 // MySQL.
 // phpcs:ignore

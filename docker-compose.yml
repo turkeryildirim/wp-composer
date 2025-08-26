@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   redis:
     build:
@@ -6,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: redis_${DOCKER_ENV}
     hostname: redis
-    restart: unless-stopped
+    restart: no
     ports:
       - "6379:6379"
     networks:
@@ -19,7 +18,7 @@ services:
       dockerfile: Dockerfile
     container_name: mariadb_${DOCKER_ENV}
     hostname: mariadb
-    restart: unless-stopped
+    restart: no
     environment:
       - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MARIADB_DATABASE=${MYSQL_DB}
@@ -39,7 +38,7 @@ services:
       dockerfile: Dockerfile
     container_name: mailpit_${DOCKER_ENV}
     hostname: mailpit
-    restart: unless-stopped
+    restart: no
     ports:
       - "8025:8025"   # Web UI port
     networks:
@@ -50,9 +49,11 @@ services:
     build:
       context: docker/php/${DOCKER_ENV}/.
       dockerfile: Dockerfile
+    env_file:
+      - .env
     container_name: php_${DOCKER_ENV}
     hostname: php
-    restart: unless-stopped
+    restart: no
     working_dir: /var/www
     volumes:
       - ./docker/php/${DOCKER_ENV}/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -61,12 +62,7 @@ services:
       - mariadb
       - redis
       - mailpit
-    environment:
-      - MYSQL_HOST=mariadb.local
-      - REDIS_HOST=redis.local
-      - MAIL_HOST=mailpit.local
     extra_hosts:
-      - "host.docker.internal:host-gateway"
       - "redis.local:172.28.0.10"
       - "mariadb.local:172.28.0.11"
       - "mailpit.local:172.28.0.12"
@@ -80,7 +76,7 @@ services:
       dockerfile: Dockerfile
     container_name: nginx_${DOCKER_ENV}
     hostname: nginx
-    restart: unless-stopped
+    restart: no
     ports:
       - "80:80"
     volumes:

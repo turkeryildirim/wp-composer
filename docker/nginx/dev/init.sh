@@ -29,7 +29,7 @@ print_step "Waiting for php.local:9000 service to be ready..."
 
 until nc -z php.local 9000; do
   print_warning "PHP service is not ready. Rechecking..."
-  sleep 5
+  sleep 10
 done
 
 print_status "PHP service is ready."
