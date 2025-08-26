@@ -1,5 +1,5 @@
 <?php
-# 1- gereksiz dosyaları sil.
+
 $targets = array(
 	'wordpress/license.txt',
 	'wordpress/readme.html',
@@ -10,7 +10,8 @@ $targets = array(
 	'wordpress/wp-content',
 );
 
-function removeDir( $dir ) {
+function remove_unnecessary($dir ): void
+{
 	if ( ! is_dir( $dir ) ) {
 		return;
 	}
@@ -26,7 +27,7 @@ function removeDir( $dir ) {
 
 foreach ( $targets as $path ) {
 	if ( is_dir( $path ) ) {
-		removeDir( $path );
+        remove_unnecessary( $path );
 		echo "Deleted: $path\n";
 	} elseif ( file_exists( $path ) ) {
 		unlink( $path );

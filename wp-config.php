@@ -43,6 +43,16 @@ define( 'WP_REDIS_SCHEME', env( 'REDIS_SCHEME', 'tcp' ) );
 define( 'WP_REDIS_MAXTTL', env( 'REDIS_MAXTTL', 3600 ) );
 define( 'WP_REDIS_DISABLED', filter_var( env( 'REDIS_DISABLED', false ), FILTER_VALIDATE_BOOLEAN ) );
 
+// Mail.
+define( 'WP_MAILER', env( 'MAILER', 'mail' ) );
+define( 'WP_MAIL_HOST', env( 'MAIL_HOST', 'localhost' ) );
+define( 'WP_MAIL_PORT', env( 'MAIL_PORT', 25 ) );
+define( 'WP_MAIL_USERNAME', env( 'MAIL_USERNAME', '' ) );
+define( 'WP_MAIL_PASSWORD', env( 'MAIL_PASSWORD', '' ) );
+define( 'WP_MAIL_ENCRYPTION', env( 'MAIL_ENCRYPTION', '' ) );
+define( 'WP_MAIL_FROM_ADDRESS', env( 'MAIL_FROM_ADDRESS', 'wordpress@local.test' ) );
+define( 'WP_MAIL_FROM_NAME', env( 'MAIL_FROM_NAME', 'WordPress Dev' ) );
+
 // Salt.
 define( 'AUTH_KEY', env( 'AUTH_KEY', '' ) );
 define( 'SECURE_AUTH_KEY', env( 'SECURE_AUTH_KEY', '' ) );

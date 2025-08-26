@@ -1,0 +1,101 @@
+version: '3.8'
+services:
+  redis:
+    build:
+      context: docker/redis/${DOCKER_ENV}/.
+      dockerfile: Dockerfile
+    container_name: redis_${DOCKER_ENV}
+    hostname: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      custom_net:
+        ipv4_address: 172.28.0.10
+
+  mariadb:
+    build:
+      context: docker/mariadb/${DOCKER_ENV}/.
+      dockerfile: Dockerfile
+    container_name: mariadb_${DOCKER_ENV}
+    hostname: mariadb
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MYSQL_DB}
+      - MARIADB_USER=${MYSQL_USER}
+      - MARIADB_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      custom_net:
+        ipv4_address: 172.28.0.11
+
+  mailpit:
+    build:
+      context: docker/mailpit/${DOCKER_ENV}/.
+      dockerfile: Dockerfile
+    container_name: mailpit_${DOCKER_ENV}
+    hostname: mailpit
+    restart: unless-stopped
+    ports:
+      - "8025:8025"   # Web UI port
+    networks:
+      custom_net:
+        ipv4_address: 172.28.0.12
+
+  php:
+    build:
+      context: docker/php/${DOCKER_ENV}/.
+      dockerfile: Dockerfile
+    container_name: php_${DOCKER_ENV}
+    hostname: php
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./docker/php/${DOCKER_ENV}/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - ./:/var/www:cached
+    depends_on:
+      - mariadb
+      - redis
+      - mailpit
+    extra_hosts:
+      - "redis.local:172.28.0.10"
+      - "mariadb.local:172.28.0.11"
+      - "mailpit.local:172.28.0.12"
+    networks:
+      custom_net:
+        ipv4_address: 172.28.0.13
+
+  nginx:
+    build:
+      context: docker/nginx/${DOCKER_ENV}/.
+      dockerfile: Dockerfile
+    container_name: nginx_${DOCKER_SERVICE}
+    hostname: nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/:ro
+      - ./app/uploads:/var/www/app/uploads:rw
+    depends_on:
+      - php
+    extra_hosts:
+      - "php.local:172.28.0.13"
+    networks:
+      custom_net:
+        ipv4_address: 172.28.0.14
+
+volumes:
+  mariadb_data:
+    driver: local
+
+networks:
+  custom_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16

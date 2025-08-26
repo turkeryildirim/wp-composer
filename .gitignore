@@ -10,6 +10,7 @@ app/uploads/*
 app/languages/*
 !app/languages/index.php
 .env
+logs/
 
 ### Composer ###
 composer.phar

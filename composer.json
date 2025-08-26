@@ -51,10 +51,10 @@
     },
     "scripts": {
       "post-install-cmd": [
-        "php ./scripts/init-wordpress.php"
+        "php ./scripts/init.php"
       ],
       "post-update-cmd": [
-        "php ./scripts/init-wordpress.php"
+        "php ./scripts/init.php"
       ],
       "check-cs": [
         "php ./vendor/bin/phpcs"
