@@ -62,6 +62,6 @@ USER wordpress
 EXPOSE 9000 9003
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD [ "sh", "-c", "kill -0 $(cat /var/run/php/php-fpm.pid) 2>/dev/null" ]
+    CMD pgrep php-fpm > /dev/null || exit 1
 
 CMD ["/usr/local/bin/init.sh"]

@@ -39,6 +39,13 @@ define( 'DB_HOST', $db_host );
 define( 'DB_CHARSET', env( 'MYSQL_CHARSET', 'utf8mb4' ) );
 define( 'DB_COLLATE', env( 'MYSQL_COLLATION', 'utf8mb4_unicode_ci' ) );
 
+// AWS S3.
+define( 'AWS_S3_KEY', env( 'REDIS_PREFIX', 's3_key' ) );
+define( 'AWS_S3_SECRET', env( 'REDIS_PREFIX', 's3_secret' ) );
+define( 'AWS_S3_BUCKET', env( 'REDIS_PREFIX', 's3_bucket' ) );
+define( 'AWS_S3_REGION', env( 'REDIS_PREFIX', 's3_region' ) );
+define( 'AWS_S3_DOMAIN', env( 'REDIS_PREFIX', 's3_domain' ) );
+
 // Redis.
 define( 'WP_REDIS_PREFIX', env( 'REDIS_PREFIX', 'local' ) );
 define( 'WP_REDIS_CLIENT', env( 'REDIS_CLIENT', 'phpredis' ) );

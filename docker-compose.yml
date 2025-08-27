@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: redis_${DOCKER_ENV}
     hostname: redis
-    restart: no
+    restart: unless-stopped
     ports:
       - "6379:6379"
     networks:
@@ -18,7 +18,7 @@ services:
       dockerfile: Dockerfile
     container_name: mariadb_${DOCKER_ENV}
     hostname: mariadb
-    restart: no
+    restart: unless-stopped
     environment:
       - MARIADB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MARIADB_DATABASE=${MYSQL_DB}
@@ -38,7 +38,7 @@ services:
       dockerfile: Dockerfile
     container_name: mailpit_${DOCKER_ENV}
     hostname: mailpit
-    restart: no
+    restart: unless-stopped
     ports:
       - "8025:8025"   # Web UI port
     networks:
@@ -53,7 +53,7 @@ services:
       - .env
     container_name: php_${DOCKER_ENV}
     hostname: php
-    restart: no
+    restart: unless-stopped
     working_dir: /var/www
     volumes:
       - ./docker/php/${DOCKER_ENV}/php.ini:/usr/local/etc/php/conf.d/custom.ini
@@ -76,7 +76,7 @@ services:
       dockerfile: Dockerfile
     container_name: nginx_${DOCKER_ENV}
     hostname: nginx
-    restart: no
+    restart: unless-stopped
     ports:
       - "80:80"
     volumes:
@@ -89,6 +89,26 @@ services:
     networks:
       custom_net:
         ipv4_address: 172.28.0.14
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_${DOCKER_ENV}
+    hostname: phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=mariadb
+      - PMA_USER=${MYSQL_USER}
+      - PMA_PASSWORD=${MYSQL_PASSWORD}
+    depends_on:
+      - mariadb
+      - php
+    ports:
+      - "8080:80"
+    networks:
+      custom_net:
+        ipv4_address: 172.28.0.15
+    extra_hosts:
+      - "mariadb.local:172.28.0.11"
 
 volumes:
   mariadb_data:
